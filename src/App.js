@@ -1,20 +1,23 @@
 import React from 'react';
-import { Dashboard, Login, PrivateRoute,  Files, Users, Error, Register } from './pages';
+import { Dashboard, Login, PrivateRoute, Register, Files, Users, Error } from './pages';
 import { BrowserRouter as Router, Switch, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path='/' element={
+        <Route path='/' element={
           <PrivateRoute>
             <Dashboard/>
           </PrivateRoute>
-        } /> */}
-        <Route path='/login' element={<Register/>} />
-        <Route path='/files' element={<Files/>} />
-        <Route path='/users' element={<Users/>} />
-        <Route  path='/' element={<Dashboard/>} />
+        } />
+        <Route path='/users' element={
+          <PrivateRoute>
+            <Users/>
+          </PrivateRoute>
+        } />
+        <Route path='/login' element={<Login/>} />
+        <Route path='/register' element={<Register/>} />
         <Route path='*' element={<Error/>} />
       </Routes>
     </Router>

@@ -1,13 +1,20 @@
-import React from 'react';
-import { Navigate  } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
+import { Route, Navigate } from 'react-router-dom';
 
-const PrivateRoute = ({children}) => {
-  const {isAuthenticated, user} = useAuth0();
-  const isUser = isAuthenticated && user; 
-  if(!isUser){
-    return <Navigate to='/login'/>
-  }
-  return children;
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('access_token')
+  return isAuthenticated ? (
+    children
+  ) : (
+    <Navigate to="/login" />
+  );
 };
+
+// import React from 'react';
+// import { Navigate  } from 'react-router-dom';
+
+// const PrivateRoute = ({ auth: { isAuthenticated }, children }) => {
+//   console.log({isAuthenticated})
+
+//   return isAuthenticated ? children : <Navigate to="/login" />;
+// };
 export default PrivateRoute;

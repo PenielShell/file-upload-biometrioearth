@@ -1,0 +1,97 @@
+{
+
+    "$schema":  "http://json-schema.org/draft-07/schema",
+
+    "$id":  "http://example.com/example.json",
+
+    "type":  "object",
+
+    "title":  "file  metadata  example",
+
+    "required":  [
+
+        "Gain",
+
+        "Battery",
+
+        "Datetime",
+
+        "FileSize"
+
+    ],
+
+    "properties":  {
+
+        "Gain":  {
+
+            "type":  "string",
+
+            "title":  "Gain",
+
+            "examples":  [
+
+                "medium"
+
+            ]
+
+        },
+
+        "Battery":  {
+
+            "type":  "string",
+
+            "title":  "Battery",
+
+            "examples":  [
+
+                "4.4V"
+
+            ]
+
+        },
+
+        "Datetime":  {
+
+            "type":  "string",
+
+             "pattern":  "^[0-9]{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])  (0?[0-9]|1[0-9]|2[0123]):(0?[0-9]|[12345][0-9]):(0?[0-9]|[12345][0-9]).([0-9]{6})-([0-9]{4})$",
+
+            "title":  "file  Datetime",
+
+            "examples":  [
+
+                "2021-08-28  16:10:00.000000-0600"
+
+            ]
+
+        },
+
+        "FileSize":  {
+
+            "type":  "integer",
+
+            "title":  "The  FileSize  Schema",
+
+            "examples":  [
+
+                5767168
+
+            ]
+
+        }
+
+    },
+
+    "examples":  [{
+
+        "Gain":  "medium",
+
+        "Battery":  "4.4V",
+
+        "Datetime":  "2021-08-28  16:10:00.000000-0600",
+
+        "FileSize":  5767168
+
+    }]
+
+}

@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const baseURL = 'http://127.0.0.1:3000';
+const baseURL = 'http://localhost:7070/graphql/';
 
 const axiosInstance = axios.create({
     baseURL: baseURL,
     timeout: 5000,
     headers: {
-        Authorization: localStorage.getItem('token') ?
-            'JWT ' + localStorage.getItem('token') : null,
+        Authorization: localStorage.getItem('access_token') ?
+            'JWT ' + localStorage.getItem('access_token') : null,
         'Content-Type': 'application/json',
         accept: 'application/json',
     },

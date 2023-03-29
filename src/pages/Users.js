@@ -34,8 +34,8 @@ const Users = () => {
                       <td>Name</td>
 					            <td>Name</td>
                       <td>   
-                      <a href="#deleteEmployeeModal" class="text-danger text-center">
-                        <i class="fas fa-trash" ></i>
+                      <a href="#deleteEmployeeModal" className="text-danger text-center">
+                        <i className="fas fa-trash" ></i>
                        </a>
                        </td>
                     </tr>
