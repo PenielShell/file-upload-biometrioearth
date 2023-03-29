@@ -2,10 +2,22 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Ajv from 'ajv';
 import metadataSchema from '../metadata-schema.json';
+import { gql } from 'graphql-tag';
+import { useMutation } from '@apollo/client';
 
 const Upload = () => {
   const [uploadedFileName, setUploadedFileName] = useState(null);
   const [inputFile, setInputFile] = useState(null);
+
+  const UPLOAD_FILE_MUTATION = gql`
+  mutation UploadFile($name: String!, $mimeType: String!, $fileMetaObject: JSONObject!, $file: Upload!) {
+    createFile(name: $name, mimeType: $mimeType, fileMetadata: $fileMetaObject, file: $file) {
+      id
+    }
+  }
+`;
+
+const [uploadFile] = useMutation(UPLOAD_FILE_MUTATION);
 
   useEffect(() => {
     setInputFile(document.getElementById("input-file"));
@@ -16,11 +28,8 @@ const Upload = () => {
   };
   const handleDisplayFileDetails = () => {
     inputFile?.files && setUploadedFileName(inputFile.files[0].name);
-    console.log(inputFile,'inputFile')
-    console.log(inputFile.files[0],'inputFile.files[0].name')
-
-
-
+    console.log(inputFile.files[0])
+    console.log(inputFile)
     createFile()
   };
 
@@ -32,11 +41,9 @@ const Upload = () => {
     return valid ? null : validate.errors;
   };
   
-  // usage:
-  
-  
+
   const createFile = async () =>{
-      const dummydata = {
+       const dummydata = {
           name: 'medium',
           type: 'application/pdf',
           size: 5767168,
@@ -45,54 +52,33 @@ const Upload = () => {
         };
         const metadata = inputFile == null? dummydata : inputFile.files[0];
         const fileMeta = {
-          name: metadata.name,
-          type: metadata.type,
-          size: metadata.size,
-          lastModified: metadata.lastModified,
           Gain: 'medium',
-  Battery: '4.4V',
-  Datetime: new Date().toLocaleString(),
-  FileSize: metadata.size,
+          Battery: '4.4V',
+          Datetime: new Date().toISOString(),
+          FileSize: metadata.size,
         };
-    const errors = validateMetadata(inputFile == null? dummydata : fileMeta);
-  
+        const errors = validateMetadata(inputFile == null ? dummydata : fileMeta);
 
     if (errors) {
         console.error(errors);
       } else {
-        console.log('Metadata is valid');
-        try {
-            let response = await fetch("http://localhost:7070/graphql/",{
-              method: "post",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                "query": `
-                    mutation {
-                      createFile(
-                        name: "${inputFile.files[0].name}", 
-                        mimeType: "${inputFile.files[0].type}",
-                        fileMetadata: "${JSON.stringify(fileMeta)}",
-                        file: "${inputFile.files[0]}"
-                        )
-                        {
-                        payload
-                      }
-                  }
-                `
+          try {
+            console.log('Metadata is valid');
+            const fileResponse = await uploadFile({
+                variables: {
+                  name: inputFile.files[0].name,
+                  mimeType: inputFile.files[0].type,
+                  fileMetaObject: JSON.stringify(fileMeta),
+                  file: inputFile.files[0]
+                }
               })
-            })
-            let refreshTokens = await response.json();
-            console.log({refreshTokens})
-            localStorage.setItem("refresh_token", refreshTokens.data.refreshToken.token);
-          } catch (error) {
+            console.log({fileResponse})
+            
+         } catch (error) {
             console.log({error})
-          }
+         }
       }
-
-   
-  }
+  };
 
   return (
     <div
